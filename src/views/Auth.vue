@@ -27,7 +27,7 @@
 </script>
 
 <style scoped>
-* {
+/* * {
   background-color: white;
 }
 h2 {
@@ -39,7 +39,7 @@ p {
   font-weight: bold;
   font-size: 20px;
   font-family: Georgia, "Times New Roman", Times, serif;
-}
+} */
 /* button {
   color: rgb(238, 238, 247);
   background-color: rgb(226, 43, 195);

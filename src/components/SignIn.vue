@@ -2,12 +2,12 @@
   <div>
     <section>
       <div>
-        <h2 class="font-serif text-2xl lg:text-3xl text-black text-center">
+        <h2 class="font-serif text-2xl lg:text-3xl text-black text-center mt-2">
           Sign In
         </h2>
 
         <p class="font-sans text-sm text-gray-special text-center mt-2">
-          ⭐ Welcome to your favorite task app! ⭐
+          ✨ Welcome to your favorite task app! ✨
         </p>
 
         <form @submit.prevent="login">
@@ -17,8 +17,7 @@
               mb-1
               font-sans
               text-sm text-gray-special
-              mt-2
-              mb-2
+              mt-4
               font-bold
             "
             >Email</label
@@ -39,13 +38,12 @@
               font-sans
               text-sm text-gray-special
               mt-2
-              mb-2
               font-bold
             "
             >Password</label
           >
           <input
-            class="w-2/5 border border-gray-special/50 rounded p-2 mt-2 mb-2"
+            class="w-2/5 border border-gray-special/50 rounded p-2 mb-6"
             id="password"
             name="password"
             type="password"
@@ -53,27 +51,22 @@
             placeholder="Insert your password"
             v-model="password"
           />
+
           <div v-if="errorMsg">
             <p>{{ errorMsg }}</p>
           </div>
           <button
-            class="
-              block
-              mb-12
-              bg-gray-special
-              rounded
-              p-3
-              font-sans
-              text-sm text-gray-200
-            "
+            class="block mb-12 rounded p-3 font-sans text-sm text-gray-200"
             type="submit"
           >
             Sign In
           </button>
         </form>
-        <p class="dontHave">
+        <p class="underline">
           Don't have an account? <br />
-          <Routing :route="route" :buttonText="buttonText" />
+          <span class="dontHave">
+            <Routing :route="route" :buttonText="buttonText"
+          /></span>
         </p>
         <!-- <Routing :route="route" :buttonText="buttonText" /> -->
       </div>
@@ -105,7 +98,6 @@ const login = async () => {
     if (error) throw error;
     router.push("/");
   } catch (error) {
-    console.log("hola");
     errorMsg.value = error.message;
     setTimeout(() => {
       errorMsg.value = null;
@@ -126,16 +118,9 @@ button {
 * {
   text-align: center;
 }
-button:hover {
-  border: solid rgb(226, 43, 195);
-  color: rgb(226, 43, 195);
-  background-color: white;
-}
+
 .dontHave:hover {
-  color: white;
-  background-color: rgb(226, 43, 195);
-  width: 250px;
-  margin-left: 40%;
+  color: rgb(226, 43, 195);
   font-weight: bold;
   border-radius: 10px;
 }

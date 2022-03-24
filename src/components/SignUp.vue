@@ -114,10 +114,12 @@
           </button>
         </div>
       </form>
-      <p>
+      <p class="underline">
         Already have an account? <br />
         <!--aqui me faltaba colocar el routing dentro del <p>-->
-        <Routing :route="route" :buttonText="buttonText" />
+        <span class="dontHave">
+          <Routing :route="route" :buttonText="buttonText"
+        /></span>
       </p>
       <!-- <Routing :route="route" :buttonText="buttonText" /> -->
     </section>
@@ -149,6 +151,7 @@ const register = async () => {
       const { error } = await supabase.auth.signUp({
         email: email.value,
         password: password.value,
+        name: name.value,
       });
       if (error) throw error;
       router.push("/auth");
@@ -178,9 +181,9 @@ button {
 h2 {
   color: rgb(226, 43, 195);
 }
-button:hover {
-  border: solid rgb(226, 43, 195);
+.dontHave:hover {
   color: rgb(226, 43, 195);
-  background-color: white;
+  font-weight: bold;
+  border-radius: 10px;
 }
 </style>
