@@ -49,12 +49,13 @@ export const useTaskStore = defineStore("tasks", {
         .delete()
         .match({ id: id });
     },
-    async removeCompleted() {
+    async isCompleted(id, status) {
       const { data, error } = await supabase
         .from("tasks")
-        .delete()
-        .match({ user_id: useUserStore().user.id });
+        .update({ is_complete: status })
+        .match({ id: id });
+      if (error) throw error;
     },
   },
 });
-/*HE AGREGADO 4 TAREAS BASICAS, ADD - REMOVE - EDIT Y REMOVE ALL */
+/*HE AGREGADO 4 TAREAS BASICAS, ADD - REMOVE - EDIT Y MARK_COMPLETED */

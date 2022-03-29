@@ -3,18 +3,18 @@
     ✨ Welcome {{ username() }} ✨
   </h4>
   <form @submit.prevent="">
-    <!-- <NewTask @newTaskAddTodo="addTodo" />-->
+    <NewTask @addTodoChild="addTodo2" />
     <h1 class="font-bold mb-6">Insert your tasks below</h1>
 
     <input
       class="text-center w-2/5 h-8 border border-gray-special/50 rounded p-2"
       v-model="newTodo"
       placeholder="You can also press enter"
-      @keyup.enter="addTodo2"
+      @keyup.enter="addTodo"
     />
     <button
       id="button_one"
-      @click="addTodo2"
+      @click="addTodo(todo)"
       class="text-white rounded w-32 p-1 mb-5 font-bold"
     >
       Add Task
@@ -26,7 +26,9 @@
     >
       Clean
     </button>
-    <p v-if="errorContainer">{{ errorMessage }}</p>
+    <p @click="notFilled" class="font-bold pink-600 underline">
+      {{ errorInput }}
+    </p>
   </form>
 
   <ul>
@@ -67,8 +69,8 @@
     type="checkbox"
     :checked="remaining === 0"
     @click="toggleAll"
-  /> -->
-  <!-- <label class="mr-4" for="toggle-all mb-4">Mark all as complete</label> -->
+  />
+  <label class="mr-4" for="toggle-all mb-4">Mark all as complete</label> -->
   <button
     class="bg-white w-48 h-10 mt-5 rounded font-bold"
     id="button_two"
@@ -98,7 +100,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watchEffect } from "vue";
+import { ref, computed } from "vue";
 import { supabase } from "../supabase";
 import { useTaskStore } from "../store/task";
 
@@ -110,7 +112,6 @@ function username() {
   const index = user_name.indexOf("@");
   return user_name.slice(0, index);
 }
-
 //Warning for leaving empty task field
 function notFilled() {
   if (newTask.value === true) {
@@ -120,33 +121,27 @@ function notFilled() {
   }
 }
 
-//Fetching data from SB
-let tasks = ref([]);
-async function fetchingTasks() {
-  const myTodos = await useTaskStore().fetchTasks();
-  tasks.value = myTodos;
-  console.log(myTodos);
-}
-fetchingTasks();
-
 //Functions tasks
-let task = ref("");
-const errorContainer = ref(false);
-const errorMessage = ref("");
 const newTodo = ref("");
 const todos = ref([{ id: id++, text: "", done: true }]);
+
+function addTodo() {
+  todos.value.push({ id: id++, text: newTodo.value, done: false });
+  newTodo.value = "";
+  console.log("hola");
+}
+//For cleaning placeholder
+function clean() {
+  newTodo.value = "";
+}
+
+// Function addtoDo 2 - USING PINIA
 async function addTodo2(newTodo) {
   await useTaskStore().insertTasks(newTodo);
   fetchingTasks();
   console.log("holhol");
 }
 
-//For cleaning placeholder
-function clean() {
-  newTodo.value = "";
-}
-
-//for deletion
 async function deleteTask(todo) {
   await useTaskStore().deleteTask(todo.id);
   await fetchingTasks();
@@ -167,12 +162,20 @@ const filteredTodos = computed(() => {
 const filters = {
   active: (todos) => todos.filter((todo) => !todo.completed),
 };
-
 // function removeCompleted() {
 //   todos.value = filters.active(todos.value);
 // }
 
+async function isCompleted(i) {
+  const task_index_id = i.id;
+  const doneTask = !hideCompleted.value[i].is_completed;
+  await useTaskStore().isCompleted(task_index_id, doneTask);
+  await fetchingTasks();
+}
+//
+
 //for editing task
+
 const editingTodo = ref(false);
 const beforeEditCache = ref("");
 async function editTask(todo) {
@@ -186,9 +189,6 @@ async function editTask(todo) {
   }
 }
 </script>
-
-
-
 <style scoped>
 .done {
   text-decoration: line-through;
@@ -202,6 +202,3 @@ async function editTask(todo) {
   border: solid rgb(226, 43, 195) 2px;
 }
 </style>
-
-
-

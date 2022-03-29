@@ -70,21 +70,17 @@
 import { supabase } from "../supabase";
 import { useRouter } from "vue-router";
 import router from "../router";
-
 import { useUserStore } from "../store/user";
 import TaskItem from "../components/TaskItem.vue";
 import { Session, Provider } from "@supabase/gotrue-js/dist/main/lib/types";
 import { useTaskStore } from "../store/task";
 import { ref, reactive, computed, onMounted } from "vue";
-
 // let tasks = ref([]);
-
 // //Fetching data from SB
 // async function fetchingTasks() {
 //   tasks.value = await useTaskStore().fetchTasks();
 // }
 // fetchingTasks();
-
 //Add tasks from NewTask Component
 // async function addTodo(newTask) {
 //   await useTaskStore().insertTasks(newTask);
@@ -105,7 +101,6 @@ async function UpdateUser(credentials) {
     alert("Error updating user info: " + error.message);
   }
 }
-
 //LogOut function
 const user = useUserStore();
 const logout = async () => {
