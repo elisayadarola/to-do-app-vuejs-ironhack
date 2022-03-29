@@ -5,7 +5,7 @@ export const useUserStore = defineStore("user", {
   state: () => ({
     user: null,
   }),
-  /*User check (if exist) in database function */
+  /*User check (if exists) in database function */
   actions: {
     async fetchUser() {
       const user = await supabase.auth.user();
@@ -25,18 +25,17 @@ export const useUserStore = defineStore("user", {
         console.log(this.user);
       }
     },
-    // async signIn(email, password) {
-    //   const { error } = await supabase.auth.signIn({
-    //     email: email.value,
-    //     password: password.value,
-    //   });
-    //   if (error) throw error;
-
-    //   if (user) {
-    //     this.user = user;
-    //     console.log(this.user);
-    //   }
-    // },
+    async signIn(email, password) {
+      const { user, error } = await supabase.auth.signIn({
+        email: email,
+        password: password,
+      });
+      if (error) throw error;
+      if (user) {
+        this.user = user;
+        console.log("hola");
+      }
+    },
 
     // async signIn() {
     //   const { user, session, error } = await supabase.auth.signIn({
@@ -61,3 +60,6 @@ export const useUserStore = defineStore("user", {
     },
   },
 });
+/* async function logOut(){
+  const (error)
+} */

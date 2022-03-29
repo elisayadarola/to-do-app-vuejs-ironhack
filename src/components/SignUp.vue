@@ -1,4 +1,5 @@
 <template>
+  <!--SignUp section -->
   <div class="signUp">
     <section>
       <h2
@@ -9,7 +10,7 @@
       <p class="font-sans text-sm text-gray-special text-center mt-2">
         💅 This is where your life becomes productive 💅
       </p>
-      <form @submit.prevent="register" class="mt-7 space-y-5 mb-5">
+      <form @submit.prevent="signUp" class="mt-7 space-y-5 mb-5">
         <div>
           <div>
             <label
@@ -130,12 +131,15 @@
 import { ref } from "vue";
 import { supabase } from "../supabase";
 import { useRouter } from "vue-router";
+import Routing from "../components/Routing.vue";
+import { storeToRefs } from "pinia";
+import { useUserStore } from "../store/user";
 /*aqui la ruta './components/Routing.vue no funcionaba y tampoco la que al final si funcionó dspués 
 de reiniciar VSCODE e intentar varias rutas*/
-import Routing from "../components/Routing.vue";
 /*aqui estaba importando dos routing con path diferentes en sitios diferentes, big mistake*/
 const route = "/auth";
 const buttonText = "Sign In";
+//Para el Auth
 const name = ref("");
 const email = ref("");
 const password = ref("");
@@ -143,7 +147,25 @@ const confirmPassword = ref("");
 const errorMsg = ref("");
 const router = useRouter();
 
-const register = async () => {
+async function signUp() {
+  if (password.value === confirmPassword.value) {
+    try {
+      await useUserStore().signUp(email.value, password.value);
+      router.push({ path: "/" });
+    } catch (error) {
+      errorMsg.value = error.message;
+      setTimeout(() => {
+        errorMsg.value = null;
+      }, 5000);
+    }
+  } else {
+    errorMsg.value = "Warning:Passwords do not match";
+    setTimeout(() => {
+      errorMsg.value = null;
+    }, 5000);
+  }
+}
+/*const register = async () => {
   console.log(email.value);
   console.log(password.value);
   if (password.value === confirmPassword.value) {
@@ -167,7 +189,7 @@ const register = async () => {
       errorMsg.value = null;
     }, 5000);
   }
-};
+};*/
 </script>
 
 <style scoped>

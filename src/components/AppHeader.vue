@@ -1,4 +1,5 @@
 <template>
+  //No usar este componente
   <div class="header">
     <h1>TaskAble</h1>
     <br />

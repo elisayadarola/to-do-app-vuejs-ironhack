@@ -1,6 +1,7 @@
 <template>
   <!-- <SignUp v-if="component"/>
 <SignIn v-else/> -->
+  <div></div>
   <div>
     <router-view></router-view>
   </div>

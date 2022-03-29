@@ -1,10 +1,12 @@
 <template>
-  <!-- <NewTask /> -->
-  <!-- <TaskItem /> -->
-
-  <!-- <Auth /> -->
-  <Nav />
+  <div>
+    <!-- <NewTask /> -->
+    <!-- <TaskItem /> -->
+    <!-- <Auth /> -->
+    <Nav />
+  </div>
   <router-view class="app-main" />
+  <Footer />
   <!-- your routes will load inside of these tags -->
 </template>
 
@@ -12,19 +14,23 @@
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 
-import { onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
+import { supabase } from "./supabase";
 import { useUserStore } from "./store/user.js";
 // import TaskItem from "./components/TaskItem.vue";
 import Nav from "./components/Nav.vue";
 import NewTask from "../src/components/NewTask.vue";
 // import Auth from "./views/Auth.vue";
+import Footer from "./components/Footer.vue";
 
 const router = useRouter();
 const userStore = useUserStore();
 const { user } = storeToRefs(userStore);
-
+// declare a ref to hold the element reference
+// the name must match template ref value
+const input = ref(null);
 onMounted(async () => {
   try {
     await userStore.fetchUser(); // here we call fetch user
@@ -47,6 +53,7 @@ onMounted(async () => {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
+
   color: #2c3e50;
   margin-top: 60px;
 }

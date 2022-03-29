@@ -1,13 +1,32 @@
 <template>
-  <section class="todoapp">
+  <form @submit.prevent="addTodo">
+    <h4 class="mb-2 font-bold underline text-pink-600">
+      ✨ Welcome {{ username() }} ✨
+    </h4>
+    <h1 class="font-bold mb-6">Insert your tasks below</h1>
+    <input
+      class="text-center w-2/5 h-8 border border-gray-special/50 rounded p-2"
+      v-model="newTodo"
+      placeholder="You can also press enter"
+      @keyup.enter="insertTasks"
+    />
+
+    <button id="button_one" class="text-white rounded w-32 p-1 mb-5 font-bold">
+      Add Task
+    </button>
+    <p @click="notFilled" class="font-bold pink-600 underline">
+      {{ errorInput }}
+    </p>
+  </form>
+  <!-- <section class="todoapp">
     <header class="header">
       <h4 class="mb-2 font-bold underline text-pink-600">
         ✨ Welcome {{ filter() }} ✨
       </h4>
-      <h1 class="font-bold underline mb-6">Tasks</h1>
-      <input
-        class="new-todo text-center font-bold text-xl mb-4"
-        autofocus
+      <h1 class="font-bold underline mb-6">Tasks</h1> -->
+  <!-- <input
+        id="newnew"
+        class="newTodo text-center font-bold text-xl mb-4"
         placeholder="Insert tasks"
         @keyup.enter="addTodo"
       />
@@ -28,10 +47,10 @@
           :key="todo.id"
           :class="{ completed: todo.completed, editing: todo === editedTodo }"
         >
-          <!-- <button class="text-white font-bold" @click="removeTodo(todo)">
+          <button class="text-white font-bold" @click="removeTodo(todo)">
             Delete task
           </button> -->
-          <!-- <button title="Edit your task" @click="editTask(index)">
+  <!-- <button title="Edit your task" @click="editTask(index)">
             <svg
               
               viewBox="0 0 24 24"
@@ -45,9 +64,9 @@
               />
             </svg>
           </button> -->
-          <div class="view">
+  <!-- <div class="view border-blue-200">
             <input
-              class="toggle accent-pink-500 mr-2"
+              class="toggle accent-pink-500 mr-2 border-orange-700"
               type="checkbox"
               v-model="todo.completed"
             />
@@ -56,7 +75,13 @@
               class="rounded-lg text-pink-600 font-bold p-2 mt-2 ml-2"
               @click="removeTodo(todo)"
             >
-              Delete
+              🧹
+            </button>
+            <button
+              class="rounded-lg text-pink-600 font-bold p-2 mt-2 ml-2"
+              @click="editTodo(todo)"
+            >
+              📝
             </button>
           </div>
           <input
@@ -116,29 +141,40 @@
         🧹 Clear completed 🧹
       </button>
     </footer>
-  </section>
+  </section> -->
 </template>
 
 <script setup>
 import { supabase } from "../supabase";
+
+//watchEffect automatically watches for changes to any state changes
 import { ref, computed, watchEffect } from "vue";
+import { useTaskStore } from "../store/task";
 
-const STORAGE_KEY = "vue-todomvc";
+const emit = defineEmits(["newTaskAddTodo"]);
+const newTask = ref("");
+const todos = ref([{ id: id++, text: "", done: true }]);
 
-/*después de hora y pico experimentando como locas, Rocío ha hallado la solución con el indexOf, mientras
-que yo pensaba que era más fácil integrar el nombre en la database de supabase y filtrarlo desde allá , OLÉEE*/
-const user_data = supabase.auth.user();
-function filter() {
-  const user_name = user_data.email;
-  const index = user_name.indexOf("@");
-  return user_name.slice(0, index);
+function insertTasks() {
+  emit("newTaskAddTodo", newTask.value);
+  todos.value.push({ id: id++, text: newTask.value, done: false });
+  newTask.value = "";
 }
+
+function notFilled() {
+  if (newTask.value === true) {
+    errorInput.value === false;
+  } else {
+    errorInput === "You must insert a task ";
+  }
+}
+
 /**/
-const filters = {
-  all: (todos) => todos,
-  active: (todos) => todos.filter((todo) => !todo.completed),
-  completed: (todos) => todos.filter((todo) => todo.completed),
-};
+// const filters = {
+//   all: (todos) => todos,
+//   active: (todos) => todos.filter((todo) => !todo.completed),
+//   completed: (todos) => todos.filter((todo) => todo.completed),
+// };
 /**/
 
 // const allTasks = filters.all;
@@ -149,75 +185,66 @@ const filters = {
 //   todos.value.splice(index, 1);
 // }
 // state
-const todos = ref(JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"));
-const visibility = ref("all");
-const editedTodo = ref();
+// const todos = ref(JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"));
+// const visibility = ref("all");
+// const editedTodo = ref();
 
-// derived state
-const filteredTodos = computed(() => filters[visibility.value](todos.value));
-const remaining = computed(() => filters.active(todos.value).length);
+// // derived state
+// const filteredTodos = computed(() => filters[visibility.value](todos.value));
+// const remaining = computed(() => filters.active(todos.value).length);
 
-// handle routing
-window.addEventListener("hashchange", onHashChange);
-onHashChange();
+// function toggleAll(e) {
+//   todos.value.forEach((todo) => (todo.completed = e.target.checked));
+// }
 
-// persist state
-watchEffect(() => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(todos.value));
-});
+// function addTodo(e) {
+//   const value = e.target.value.trim();
+//   if (value) {
+//     todos.value.push({
+//       id: Date.now(),
+//       title: value,
+//       completed: false,
+//     });
+//     e.target.value = "";
+//   }
+// }
 
-function toggleAll(e) {
-  todos.value.forEach((todo) => (todo.completed = e.target.checked));
-}
+// function removeTodo(todo) {
+//   todos.value.splice(todos.value.indexOf(todo), 1);
+// }
 
-function addTodo(e) {
-  const value = e.target.value.trim();
-  if (value) {
-    todos.value.push({
-      id: Date.now(),
-      title: value,
-      completed: false,
-    });
-    e.target.value = "";
-  }
-}
+// let beforeEditCache = "";
+// function editTodo(todo) {
+//   beforeEditCache = todo.title;
+//   editedTodo.value = todo;
+// }
 
-function removeTodo(todo) {
-  todos.value.splice(todos.value.indexOf(todo), 1);
-}
+// function cancelEdit(todo) {
+//   editedTodo.value = null;
+//   todo.title = beforeEditCache;
+// }
 
-let beforeEditCache = "";
-function editTodo(todo) {
-  beforeEditCache = todo.title;
-  editedTodo.value = todo;
-}
+// function doneEdit(todo) {
+//   if (editedTodo.value) {
+//     editedTodo.value = null;
+//     todo.title = todo.title.trim();
+//     if (!todo.title) removeTodo(todo);
+//   }
+// }
 
-function cancelEdit(todo) {
-  editedTodo.value = null;
-  todo.title = beforeEditCache;
-}
+// function removeCompleted() {
+//   todos.value = filters.active(todos.value);
+// }
 
-function doneEdit(todo) {
-  if (editedTodo.value) {
-    editedTodo.value = null;
-    todo.title = todo.title.trim();
-    if (!todo.title) removeTodo(todo);
-  }
-}
-
-function removeCompleted() {
-  todos.value = filters.active(todos.value);
-}
-
-function onHashChange() {
-  const route = window.location.hash.replace(/#\/?/, "");
-  if (filters[route]) {
-    visibility.value = route;
-  } else {
-    window.location.hash = "";
-    visibility.value = "all";
-  }
-}
+// function onHashChange() {
+//   const route = window.location.hash.replace(/#\/?/, "");
+//   if (filters[route]) {
+//     visibility.value = route;
+//   } else {
+//     window.location.hash = "";
+//     visibility.value = "all";
+//   }
+// }
 </script>
 
 <style scoped>
@@ -232,4 +259,7 @@ a:hover {
   font-weight: bold;
   border-radius: 10px;
 }
+/* #newnew {
+  color: pink;
+} */
 </style>

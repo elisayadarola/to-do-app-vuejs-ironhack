@@ -7,10 +7,10 @@
         </h2>
 
         <p class="font-sans text-sm text-gray-special text-center mt-2">
-          ✨ Welcome to your favorite task app! ✨
+          ✨ Welcome to your favorite task app!
         </p>
-
-        <form @submit.prevent="login">
+        <!--submit.prevent sirve para que la página no haga reload cuando hacemos click-->
+        <form @submit.prevent="signIn">
           <label
             class="
               block
@@ -29,6 +29,7 @@
             name="email"
             required
             v-model="email"
+            placeholder="Your email goes here"
           />
 
           <label
@@ -48,8 +49,9 @@
             name="password"
             type="password"
             required
-            placeholder="Insert your password"
+            placeholder="And your password here"
             v-model="password"
+            @keyup.enter="signIn"
           />
 
           <div v-if="errorMsg">
@@ -62,8 +64,8 @@
             Sign In
           </button>
         </form>
-        <p class="underline">
-          Don't have an account? <br />
+        <p>
+          <span class="italic"> Don't have an account? <br /> </span>
           <span class="dontHave">
             <Routing :route="route" :buttonText="buttonText"
           /></span>
@@ -78,6 +80,8 @@ import { ref } from "vue";
 import { supabase } from "../supabase";
 import { useRouter } from "vue-router";
 import Routing from "../components/Routing.vue";
+import { storeToRefs } from "pinia";
+import { useUserStore } from "../store/user";
 
 // import Routing from "../components/Routing.vue";
 
@@ -87,9 +91,22 @@ const email = ref("");
 const password = ref("");
 const errorMsg = ref("");
 const router = useRouter();
+const userStore = useUserStore();
+
+async function signIn() {
+  try {
+    await userStore.signIn(email.value, password.value);
+    router.push({ path: "/" });
+  } catch (error) {
+    errorMsg.value = error.message;
+    setTimeout(() => {
+      errorMsg.value = null;
+    }, 5000);
+  }
+}
 
 /*Función para error de credenciales incorrectas */
-const login = async () => {
+/*const login = async () => {
   try {
     const { error } = await supabase.auth.signIn({
       email: email.value,
@@ -103,7 +120,7 @@ const login = async () => {
       errorMsg.value = null;
     }, 5000);
   }
-};
+};*/
 </script>
 
 <style scoped>
@@ -123,5 +140,9 @@ button {
   color: rgb(226, 43, 195);
   font-weight: bold;
   border-radius: 10px;
+}
+a:hover {
+  color: rgb(226, 43, 195);
+  font-weight: bold;
 }
 </style>
