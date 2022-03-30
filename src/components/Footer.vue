@@ -10,6 +10,9 @@
       bg-pink-400
     "
   >
+    <router-link to="/User">
+      <h4 class="cursor-pointer text-white font-bold">Account Info</h4>
+    </router-link>
     <p class="font-georgia">&copy; TaskAble App {{ currentYear }}</p>
   </footer>
 </template>

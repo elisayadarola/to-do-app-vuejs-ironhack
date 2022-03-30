@@ -14,6 +14,10 @@ const routes = [
     ],
   },
   { path: "/", component: Home },
+  // {
+  //   path: "/userInfo",
+  //   component: User,
+  // },
 ];
 const router = createRouter({
   history: createWebHistory(),

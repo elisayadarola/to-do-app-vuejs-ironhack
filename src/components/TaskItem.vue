@@ -2,19 +2,19 @@
   <h4 class="mb-2 font-bold underline text-pink-600">
     ✨ Welcome {{ username() }} ✨
   </h4>
-  <form @submit.prevent="">
+  <form @submit.prevent="addTodo">
     <!-- <NewTask @newTaskAddTodo="addTodo" />-->
     <h1 class="font-bold mb-6">Insert your tasks below</h1>
 
     <input
       class="text-center w-2/5 h-8 border border-gray-special/50 rounded p-2"
       v-model="newTodo"
-      placeholder="You can also press enter"
-      @keyup.enter="addTodo2"
+      placeholder="Your day begins here"
     />
+    <!-- <p v-if="newTodo === false">You must insert a task</p> -->
     <button
       id="button_one"
-      @click="addTodo2"
+      type="submit"
       class="text-white rounded w-32 p-1 mb-5 font-bold"
     >
       Add Task
@@ -26,16 +26,18 @@
     >
       Clean
     </button>
-    <p v-if="errorContainer">{{ errorMessage }}</p>
+    <!-- <p v-if="newTodo.length < 5" class="mt-6 font-bold text-pink-600">
+      The task must be longer than 5 characters
+    </p> -->
   </form>
 
   <ul>
-    <li v-for="todo in tasks" :key="todo.id">
+    <li v-for="todo in filteredTodos" :key="todo.id">
       <input
         class="mr-2 p-5"
         type="checkbox"
-        v-model="todo.done"
-        @keyup.enter="saveTodo"
+        v-model="todo.is_complete"
+        @click="completedTodo(todo)"
       />
       <input
         :class="{ done: todo.is_complete }"
@@ -43,6 +45,13 @@
         :disabled="!editingTodo"
         @keyup.enter="editTask(todo)"
       />
+      <button
+        class="rounded-lg text-pink-600 font-bold p-2 mt-2 ml-2"
+        @click="editTask(todo)"
+      >
+        📝
+      </button>
+
       <!-- <button class="ml-2" @click="deleteTask(todo)">✖️</button> -->
       <button
         class="rounded-lg text-pink-600 font-bold p-2 mt-2 ml-2"
@@ -50,19 +59,18 @@
       >
         🧹
       </button>
-      <button
-        class="rounded-lg text-pink-600 font-bold p-2 mt-2 ml-2"
-        @click="editTask(todo)"
-      >
-        📝
-      </button>
     </li>
   </ul>
+
+  <p>
+    <span class="font-bold" mt-4> {{ remaining }} </span>
+    {{ remaining === 1 ? "item" : "items" }} left
+  </p>
+
   <p class="mt-6 text-pink-600 font-bold underline" v-if="tasks.length === 0">
     Looks like you've been productive! 💯
   </p>
   <!-- <input
-    id="toggle-all"
     class="toggle-all mr-2 accent-pink-500"
     type="checkbox"
     :checked="remaining === 0"
@@ -70,27 +78,27 @@
   /> -->
   <!-- <label class="mr-4" for="toggle-all mb-4">Mark all as complete</label> -->
   <button
-    class="bg-white w-48 h-10 mt-5 rounded font-bold"
+    class="bg-white h-10 mt-5 rounded font-bold"
     id="button_two"
     @click="hideCompleted = !hideCompleted"
   >
-    {{ hideCompleted ? "Show all" : "Hide completed" }}
+    {{ hideCompleted ? "Show completed" : "Show all" }}
   </button>
   <footer>
     <button
       class="
         clear-completed
-        block
         mt-12
         bg-pink-400
         rounded
         p-3
         text-white
         font-bold
-        w-2/5
+        w-54
+        flex-col
+        items-center
       "
       @click="removeCompleted"
-      v-show="todos.length > remaining"
     >
       🧹 Clear completed 🧹
     </button>
@@ -98,10 +106,17 @@
 </template>
 
 <script setup>
-import { ref, computed, watchEffect } from "vue";
+import { ref, computed } from "vue";
 import { supabase } from "../supabase";
 import { useTaskStore } from "../store/task";
 
+//for showing/hiding completed tasks
+const filters = {
+  all: (todos) => todos,
+  active: (todos) => todos.filter((todo) => !todo.is_complete),
+  completed: (todos) => todos.filter((todo) => todo.is_complete),
+};
+const remaining = computed(() => filters.active(tasks.value).length);
 //For welcoming user with first part of email until the @
 let id = 0;
 const user_data = supabase.auth.user();
@@ -112,13 +127,13 @@ function username() {
 }
 
 //Warning for leaving empty task field
-function notFilled() {
-  if (newTask.value === true) {
-    errorInput.value === false;
-  } else {
-    errorInput === "You must insert a task ";
-  }
-}
+// function notFilled() {
+//   if (newTask.value === true) {
+//     errorInput.value === false;
+//   } else {
+//     errorInput === "You must insert a task ";
+//   }
+// }
 
 //Fetching data from SB
 let tasks = ref([]);
@@ -129,16 +144,21 @@ async function fetchingTasks() {
 }
 fetchingTasks();
 
-//Functions tasks
+//Const tasks
 let task = ref("");
 const errorContainer = ref(false);
 const errorMessage = ref("");
 const newTodo = ref("");
 const todos = ref([{ id: id++, text: "", done: true }]);
-async function addTodo2(newTodo) {
-  await useTaskStore().insertTasks(newTodo);
+
+//For ADDING TODO
+//Aqui o tenia que pasarle newTodo como parámetro y colocar .value
+//Con un V-model, lo puedo usar en cualquier sitio, y portanto no hay necesidad de pasar parametro. Nada más el
+async function addTodo() {
+  await useTaskStore().insertTasks(newTodo.value);
+  newTodo.value = "";
   fetchingTasks();
-  console.log("holhol");
+  console.log(newTodo);
 }
 
 //For cleaning placeholder
@@ -152,38 +172,50 @@ async function deleteTask(todo) {
   await fetchingTasks();
   console.log("hello");
 }
-// for toggling
-function toggleAll(e) {
-  todos.value.forEach((todo) => (todo.completed = e.target.checked));
+
+//For completion
+async function completedTodo(todo) {
+  const pepe = todo.id;
+  todo.is_complete = !todo.is_complete;
+  await useTaskStore().isCompleted(pepe, todo.is_complete);
+  await fetchingTasks();
+  console.log(todo.is_complete);
 }
-//for filtering
+
+//For removing completed
+function removeCompleted(todo) {
+  tasks.value.splice(tasks.value.indexOf(todo), 1);
+  console.log("completed");
+}
+
+//for filtering & hiding completed
 const hideCompleted = ref(false);
+
 const filteredTodos = computed(() => {
-  return hideCompleted.value ? todos.value.filter((t) => !t.done) : todos.value;
+  return hideCompleted.value === true
+    ? tasks.value
+    : tasks.value.filter((t) => !t.is_complete === false);
+  fetchingTasks();
   console.log("holahola");
 });
 
-//for removing completed
-const filters = {
-  active: (todos) => todos.filter((todo) => !todo.completed),
-};
-
-// function removeCompleted() {
-//   todos.value = filters.active(todos.value);
-// }
-
 //for editing task
 const editingTodo = ref(false);
-const beforeEditCache = ref("");
+const beforeEditTodo = ref("");
 async function editTask(todo) {
   if (editingTodo.value === false) {
-    beforeEditCache.value = todo.title;
+    beforeEditTodo.value = todo.title;
     editingTodo.value = true;
   } else {
     const res = await useTaskStore().editTask(todo.title, todo.id);
     console.log(res);
     editingTodo.value = false;
   }
+}
+
+//for marking all as completed
+function toggleAll(e) {
+  tasks.value.forEach((todo) => (todo.is_complete = e.target.checked));
 }
 </script>
 
@@ -200,6 +232,13 @@ async function editTask(todo) {
 #button_two {
   color: rgb(226, 43, 195);
   border: solid rgb(226, 43, 195) 2px;
+  width: 9.375rem;
+}
+#button_two:hover {
+  color: white;
+  font-weight: bold;
+  border-radius: 10px;
+  background-color: rgb(226, 43, 195);
 }
 </style>
 

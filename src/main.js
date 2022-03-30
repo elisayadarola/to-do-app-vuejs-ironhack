@@ -5,6 +5,4 @@ import router from "./router/index";
 const pinia = createPinia();
 import "./index.css";
 
-
-
 createApp(App).use(router).use(pinia).mount("#app");

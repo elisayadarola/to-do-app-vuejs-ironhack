@@ -20,11 +20,11 @@ h1 {
   font-size: 50px;
   font-weight: bold;
 }
-img {
+/* img {
   height: 200px;
   width: 200px;
   align-items: flex-start;
   margin-top: 0px;
   position: center;
-}
+} */
 </style>

@@ -19,10 +19,7 @@ import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import { supabase } from "./supabase";
 import { useUserStore } from "./store/user.js";
-// import TaskItem from "./components/TaskItem.vue";
 import Nav from "./components/Nav.vue";
-import NewTask from "../src/components/NewTask.vue";
-// import Auth from "./views/Auth.vue";
 import Footer from "./components/Footer.vue";
 
 const router = useRouter();
