@@ -7,7 +7,7 @@
         </h2>
 
         <p class="font-sans text-sm text-gray-special text-center mt-2">
-          ✨ Welcome to your favorite task app!
+          ✨ Welcome to your favorite task app!✨
         </p>
         <!--submit.prevent sirve para que la página no haga reload cuando hacemos click-->
         <form @submit.prevent="signIn">
@@ -23,7 +23,16 @@
             >Email</label
           >
           <input
-            class="border border-grey-special/50 rounded p-2 w-2/5"
+            class="
+              border border-grey-special/50
+              rounded
+              p-2
+              w-2/5
+              hover:border-fuchsia hover:
+              border-solid
+              hover:
+              border-2
+            "
             id="email"
             type="email"
             name="email"
@@ -44,7 +53,17 @@
             >Password</label
           >
           <input
-            class="w-2/5 border border-gray-special/50 rounded p-2 mb-6"
+            class="
+              w-2/5
+              border border-gray-special/50
+              rounded
+              p-2
+              mb-6
+              hover:border-fuchsia hover:
+              border-solid
+              hover:
+              border-2
+            "
             id="password"
             name="password"
             type="password"
@@ -57,15 +76,32 @@
           <div v-if="errorMsg">
             <p>{{ errorMsg }}</p>
           </div>
+          <br />
           <button
-            class="block mb-12 rounded p-3 font-sans text-sm text-gray-200"
+            class="
+              text-white
+              font-bold
+              w-20
+              bg-fuchsia
+              mb-12
+              rounded
+              p-3
+              font-sans
+              text-sm text-white
+              hover:border-fuchsia hover:
+              border-solid
+              hover:
+              border-2
+            "
             type="submit"
           >
             Sign In
           </button>
         </form>
-        <p>
-          <span class="italic"> Don't have an account? <br /> </span>
+        <p class="mb-4">
+          <span class="italic mb-2 flex justify-center">
+            Don't have an account?
+          </span>
           <span class="dontHave">
             <Routing :route="route" :buttonText="buttonText"
           /></span>
@@ -124,14 +160,14 @@ async function signIn() {
 </script>
 
 <style scoped>
-button {
+/* button {
   background-color: pink;
   color: white;
   font-weight: bold;
   font-family: Georgia, "Times New Roman", Times, serif;
   width: 40%;
   margin-left: 30%;
-}
+} */
 * {
   text-align: center;
 }

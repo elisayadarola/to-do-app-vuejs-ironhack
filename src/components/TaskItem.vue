@@ -1,7 +1,5 @@
 <template>
-  <h4 class="mb-2 font-bold underline text-pink-600">
-    ✨ Welcome {{ username() }} ✨
-  </h4>
+  <h4 class="mb-2 font-bold text-pink">✨ Welcome {{ username() }} ✨</h4>
   <form @submit.prevent="addTodo">
     <!-- <NewTask @newTaskAddTodo="addTodo" />-->
     <h1 class="font-bold mb-6">Insert your tasks below</h1>
@@ -13,15 +11,24 @@
     />
     <!-- <p v-if="newTodo === false">You must insert a task</p> -->
     <button
-      id="button_one"
       type="submit"
-      class="text-white rounded w-32 p-1 mb-5 font-bold"
+      class="
+        button_one
+        bg-fuchsia
+        text-white
+        rounded
+        w-32
+        p-1
+        mb-5
+        font-bold
+        ml-4
+        mr-2
+      "
     >
       Add Task
     </button>
     <button
-      id="button_one"
-      class="text-white rounded w-32 p-1 mb-5 font-bold"
+      class="button_one bg-fuchsia text-white rounded w-32 p-1 mb-5 font-bold"
       @click="clean"
     >
       Clean
@@ -46,18 +53,18 @@
         @keyup.enter="editTask(todo)"
       />
       <button
-        class="rounded-lg text-pink-600 font-bold p-2 mt-2 ml-2"
+        class="rounded-lg hover:text-fuchsia font-bold p-2 mt-2 ml-2"
         @click="editTask(todo)"
       >
-        📝
+        📝 Edit
       </button>
 
       <!-- <button class="ml-2" @click="deleteTask(todo)">✖️</button> -->
       <button
-        class="rounded-lg text-pink-600 font-bold p-2 mt-2 ml-2"
+        class="rounded-lg hover:text-fuchsia font-bold p-2 mt-2 ml-2"
         @click="deleteTask(todo)"
       >
-        🧹
+        🧹 Delete
       </button>
     </li>
   </ul>
@@ -78,8 +85,17 @@
   /> -->
   <!-- <label class="mr-4" for="toggle-all mb-4">Mark all as complete</label> -->
   <button
-    class="bg-white h-10 mt-5 rounded font-bold"
-    id="button_two"
+    class="
+      button_two
+      bg-white
+      h-10
+      mt-5
+      rounded
+      font-bold
+      text-fuchsia
+      border border-fuchsia/100
+      w-24
+    "
     @click="hideCompleted = !hideCompleted"
   >
     {{ hideCompleted ? "Show completed" : "Show all" }}
@@ -87,16 +103,17 @@
   <footer>
     <button
       class="
+        button_two
         clear-completed
         mt-12
-        bg-pink-400
+        bg-fuchsia
         rounded
         p-3
         text-white
-        font-bold
         w-54
         flex-col
         items-center
+        font-bold
       "
       @click="removeCompleted"
     >
@@ -225,16 +242,12 @@ function toggleAll(e) {
 .done {
   text-decoration: line-through;
 }
-#button_one {
-  background-color: rgb(226, 43, 195);
-  margin-left: 10px;
+.button_one:hover {
+  background-color: white;
+  border: solid 2px fuchsia;
+  color: fuchsia;
 }
-#button_two {
-  color: rgb(226, 43, 195);
-  border: solid rgb(226, 43, 195) 2px;
-  width: 9.375rem;
-}
-#button_two:hover {
+.button_two:hover {
   color: white;
   font-weight: bold;
   border-radius: 10px;
