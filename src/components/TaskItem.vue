@@ -1,5 +1,5 @@
 <template>
-  <h4 class="mb-2 font-bold text-pink">✨ Welcome {{ username() }} ✨</h4>
+  <h4 class="mb-2 font-bold text-fuchsia">✨ Welcome {{ username() }} ✨</h4>
   <form @submit.prevent="addTodo">
     <!-- <NewTask @newTaskAddTodo="addTodo" />-->
     <h1 class="font-bold mb-6">Insert your tasks below</h1>
@@ -50,7 +50,9 @@
         :class="{ done: todo.is_complete }"
         v-model="todo.title"
         :disabled="!editingTodo"
-        @keyup.enter="editTask(todo)"
+        @dblclick="editTask(todo)"
+        type="text"
+        class="border border-gray-special/50"
       />
       <button
         class="rounded-lg hover:text-fuchsia font-bold p-2 mt-2 ml-2"
@@ -94,11 +96,12 @@
       font-bold
       text-fuchsia
       border border-fuchsia/100
-      w-24
+      w-26
+      p-2
     "
     @click="hideCompleted = !hideCompleted"
   >
-    {{ hideCompleted ? "Show completed" : "Show all" }}
+    {{ hideCompleted ? "Show all" : "Hide completed" }}
   </button>
   <footer>
     <button
@@ -200,7 +203,7 @@ async function completedTodo(todo) {
 }
 
 //For removing completed
-function removeCompleted(todo) {
+async function removeCompleted(todo) {
   tasks.value.splice(tasks.value.indexOf(todo), 1);
   console.log("completed");
 }
@@ -209,9 +212,9 @@ function removeCompleted(todo) {
 const hideCompleted = ref(false);
 
 const filteredTodos = computed(() => {
-  return hideCompleted.value === true
+  return hideCompleted.value === false
     ? tasks.value
-    : tasks.value.filter((t) => !t.is_complete === false);
+    : tasks.value.filter((t) => !t.is_complete === true);
   fetchingTasks();
   console.log("holahola");
 });
@@ -240,7 +243,7 @@ function toggleAll(e) {
 
 <style scoped>
 .done {
-  text-decoration: line-through;
+  text-decoration: line-through red 4px;
 }
 .button_one:hover {
   background-color: white;

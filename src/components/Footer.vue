@@ -13,7 +13,9 @@
     <router-link to="/User">
       <h4 class="cursor-pointer text-white font-bold mt-4">Account Info</h4>
     </router-link>
-    <p class="font-georgia mt-4">&copy; TaskAble App {{ currentYear }}</p>
+    <p class="font-georgia mt-4 text-white">
+      &copy; TaskAble App {{ currentYear }}
+    </p>
   </footer>
 </template>
 
