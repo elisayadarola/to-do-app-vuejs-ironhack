@@ -6,6 +6,7 @@ module.exports = {
       fuchsia: "#e22bc3",
       white: "#ffffff",
       pink: "#f22d4e",
+      grey: "#f89df8",
     },
   },
   plugins: [],

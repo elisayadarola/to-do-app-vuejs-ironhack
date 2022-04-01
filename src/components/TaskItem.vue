@@ -41,7 +41,7 @@
   <ul>
     <li v-for="todo in filteredTodos" :key="todo.id">
       <input
-        class="mr-2 p-5"
+        class="mr-2 p-5 accent-fuchsia"
         type="checkbox"
         v-model="todo.is_complete"
         @click="completedTodo(todo)"
@@ -50,9 +50,12 @@
         :class="{ done: todo.is_complete }"
         v-model="todo.title"
         :disabled="!editingTodo"
-        @dblclick="editTask(todo)"
+        @keyup.enter="editTask(todo)"
         type="text"
-        class="border border-gray-special/50"
+        class="
+          border border-fuchsia/50
+          hover:bg-grey hover:text-white hover:font-bold
+        "
       />
       <button
         class="rounded-lg hover:text-fuchsia font-bold p-2 mt-2 ml-2"
@@ -79,32 +82,54 @@
   <p class="mt-6 text-pink-600 font-bold underline" v-if="tasks.length === 0">
     Looks like you've been productive! 💯
   </p>
-  <!-- <input
-    class="toggle-all mr-2 accent-pink-500"
-    type="checkbox"
-    :checked="remaining === 0"
-    @click="toggleAll"
-  /> -->
-  <!-- <label class="mr-4" for="toggle-all mb-4">Mark all as complete</label> -->
-  <button
-    class="
-      button_two
-      bg-white
-      h-10
-      mt-5
-      rounded
-      font-bold
-      text-fuchsia
-      border border-fuchsia/100
-      w-26
-      p-2
-    "
-    @click="hideCompleted = !hideCompleted"
-  >
-    {{ hideCompleted ? "Show all" : "Hide completed" }}
-  </button>
-  <footer>
+  <div class="flex-col items-center">
+    <input
+      class="toggle-all mr-2 accent-fuchsia"
+      type="checkbox"
+      :checked="remaining === 0"
+      @click="toggleAll"
+    />
     <button
+      class="
+        button_two
+        bg-white
+        h-10
+        mt-5
+        rounded
+        font-bold
+        text-fuchsia
+        border border-fuchsia/100
+        w-26
+        p-2
+        mr-4
+      "
+      for="toggle-all mb-4"
+      @click="toggleAll"
+    >
+      Mark all as complete
+    </button>
+
+    <button
+      class="
+        button_two
+        bg-white
+        h-10
+        mt-5
+        rounded
+        font-bold
+        text-fuchsia
+        border border-fuchsia/100
+        w-26
+        p-2
+      "
+      @click="hideCompleted = !hideCompleted"
+    >
+      {{ hideCompleted ? "Show all" : "Hide completed" }}
+    </button>
+  </div>
+
+  <footer>
+    <!-- <button
       class="
         button_two
         clear-completed
@@ -121,12 +146,12 @@
       @click="removeCompleted"
     >
       🧹 Clear completed 🧹
-    </button>
+    </button> -->
   </footer>
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, nextTick } from "vue";
 import { supabase } from "../supabase";
 import { useTaskStore } from "../store/task";
 
@@ -136,6 +161,12 @@ const filters = {
   active: (todos) => todos.filter((todo) => !todo.is_complete),
   completed: (todos) => todos.filter((todo) => todo.is_complete),
 };
+
+//for marking all as completed
+function toggleAll(e) {
+  tasks.value.forEach((todo) => (todo.is_complete = e.target.checked));
+}
+
 const remaining = computed(() => filters.active(tasks.value).length);
 //For welcoming user with first part of email until the @
 let id = 0;
@@ -203,9 +234,12 @@ async function completedTodo(todo) {
 }
 
 //For removing completed
-async function removeCompleted(todo) {
-  tasks.value.splice(tasks.value.indexOf(todo), 1);
-  console.log("completed");
+// //
+function removeCompleted(todo) {
+  todo.value = todo.value.is_complete;
+  const completadaTodo = todo.value;
+  return completadaTodo;
+  console.log("task");
 }
 
 //for filtering & hiding completed
@@ -232,18 +266,16 @@ async function editTask(todo) {
     editingTodo.value = false;
   }
 }
-
-//for marking all as completed
-function toggleAll(e) {
-  tasks.value.forEach((todo) => (todo.is_complete = e.target.checked));
-}
 </script>
 
 
 
 <style scoped>
+* {
+  text-align: center;
+}
 .done {
-  text-decoration: line-through red 4px;
+  text-decoration: line-through red px;
 }
 .button_one:hover {
   background-color: white;

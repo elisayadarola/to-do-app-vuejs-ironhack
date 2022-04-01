@@ -5,7 +5,13 @@
     <!-- <Auth /> -->
     <Nav />
   </div>
-  <router-view class="app-main" />
+  <transition
+    mode="out-in"
+    enter-active-class="animate__animated animate__fadeIn"
+    leave-active-class="animate__animated animate__fadeOut"
+  >
+    <router-view class="app-main" />
+  </transition>
   <Footer />
   <!-- your routes will load inside of these tags -->
 </template>

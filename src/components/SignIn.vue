@@ -2,7 +2,9 @@
   <div>
     <section>
       <div>
-        <h2 class="font-serif text-2xl lg:text-3xl text-black text-center mt-2">
+        <h2
+          class="font-serif text-2xl lg:text-3xl text-fuchsia text-center mt-2"
+        >
           Sign In
         </h2>
 
@@ -102,10 +104,11 @@
           <span class="italic mb-2 flex justify-center">
             Don't have an account?
           </span>
-          <span class="dontHave">
-            <Routing :route="route" :buttonText="buttonText"
-          /></span>
         </p>
+        <span class="dontHave mb-2">
+          <Routing :route="route" :buttonText="buttonText"
+        /></span>
+
         <!-- <Routing :route="route" :buttonText="buttonText" /> -->
       </div>
     </section>

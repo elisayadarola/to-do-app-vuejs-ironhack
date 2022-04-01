@@ -1,5 +1,6 @@
 <template>
   <!-- <NewTask @newTaskAddTodo="addTodo" /> -->
+
   <TaskItem />
   <!-- <User /> -->
   <div
@@ -24,6 +25,7 @@ import { Session, Provider } from "@supabase/gotrue-js/dist/main/lib/types";
 import { useTaskStore } from "../store/task";
 import { ref, reactive, computed, onMounted } from "vue";
 import User from "./User.vue";
+import Footer from "../components/Footer.vue";
 // let tasks = ref([]);
 // //Fetching data from SB
 // async function fetchingTasks() {

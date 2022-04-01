@@ -12,7 +12,7 @@ export const useTaskStore = defineStore("tasks", {
         const { data: tasks, error } = await supabase
           .from("tasks")
           .select("*")
-          .order("is_complete", { ascending: false });
+          .order("is_complete", { ascending: true });
         if (error) throw error;
         this.tasks = tasks;
         return this.tasks;

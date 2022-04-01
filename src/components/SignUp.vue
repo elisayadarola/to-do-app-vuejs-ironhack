@@ -101,13 +101,19 @@
 
           <button
             class="
-              block
+              text-white
+              font-bold
+              w-24
+              bg-fuchsia
               mb-12
-              bg-gray-special
               rounded
               p-3
               font-sans
-              text-sm text-gray-200
+              text-sm text-white
+              hover:border-fuchsia hover:
+              border-solid
+              hover:
+              border-2
             "
             type="submit"
           >
@@ -115,13 +121,13 @@
           </button>
         </div>
       </form>
-      <p class="underline">
-        Already have an account? <br />
+      <p class="italic mb-4">
+        Already have an account?
         <!--aqui me faltaba colocar el routing dentro del <p>-->
-        <span class="dontHave">
-          <Routing :route="route" :buttonText="buttonText"
-        /></span>
       </p>
+      <span class="dontHave mb-2">
+        <Routing :route="route" :buttonText="buttonText"
+      /></span>
       <!-- <Routing :route="route" :buttonText="buttonText" /> -->
     </section>
   </div>
@@ -193,12 +199,8 @@ async function signUp() {
 </script>
 
 <style scoped>
-button {
-  background-color: pink;
-  color: white;
-  font-weight: bold;
-  width: 40%;
-  margin-left: 30%;
+* {
+  text-align: center;
 }
 h2 {
   color: rgb(226, 43, 195);
