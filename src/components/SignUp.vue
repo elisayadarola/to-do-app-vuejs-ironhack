@@ -12,8 +12,6 @@
       </p>
       <form @submit.prevent="signUp" class="mt-7 space-y-5 mb-5">
         <div>
-          <div></div>
-
           <div>
             <label
               class="
@@ -28,7 +26,14 @@
               >Email</label
             >
             <input
-              class="border border-grey-special/50 rounded p-2 w-2/5"
+              class="
+                border border-grey-special/50
+                rounded
+                p-2
+                w-2/5
+                border-2
+                hover:border-fuchsia
+              "
               id="email"
               type="email"
               name="email"
@@ -51,7 +56,16 @@
               >Password</label
             >
             <input
-              class="w-2/5 border border-gray-special/50 rounded p-2 mt-2 mb-2"
+              class="
+                w-2/5
+                border border-gray-special/50
+                rounded
+                p-2
+                mt-2
+                mb-2
+                border-2
+                hover:border-fuchsia
+              "
               id="password"
               name="password"
               type="password"
@@ -67,7 +81,15 @@
               >Confirm password</label
             >
             <input
-              class="mb-7 w-2/5 border border-gray-special/50 rounded p-2"
+              class="
+                mb-7
+                w-2/5
+                border border-gray-special/50
+                rounded
+                p-2
+                border-2
+                hover:border-fuchsia
+              "
               id="confirmPassword"
               name="confirmPassword"
               type="password"
