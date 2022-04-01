@@ -12,25 +12,7 @@
       </p>
       <form @submit.prevent="signUp" class="mt-7 space-y-5 mb-5">
         <div>
-          <div>
-            <label
-              class="
-                block
-                mb-1
-                font-sans
-                text-sm text-gray-special
-                mb-2
-                mt-2
-                font-bold
-              "
-              >Name</label
-            >
-            <input
-              class="border border-gray-special/50 rounded p-2 w-2/5"
-              type="text"
-              v-model="name"
-            />
-          </div>
+          <div></div>
 
           <div>
             <label
@@ -121,7 +103,7 @@
           </button>
         </div>
       </form>
-      <p class="italic mb-4">
+      <p class="italic mb-4 font-bold text-fuchsia">
         Already have an account?
         <!--aqui me faltaba colocar el routing dentro del <p>-->
       </p>

@@ -4,6 +4,7 @@ import Home from "../views/Home.vue";
 import SignIn from "../components/SignIn.vue";
 import SignUp from "../components/SignUp.vue";
 import User from "../views/User.vue";
+import UserInfo from "../components/UserInfo.vue";
 
 const routes = [
   {
@@ -17,12 +18,12 @@ const routes = [
   {
     path: "/",
     component: Home,
-    children: [{ path: "user-info", component: User }],
+    // children: [{ path: "home/user-info", component: UserInfo }],
   },
-  // {
-  //   path: "/userInfo",
-  //   component: User,
-  // },
+  {
+    path: "/user-info",
+    component: UserInfo,
+  },
 ];
 const router = createRouter({
   history: createWebHistory(),

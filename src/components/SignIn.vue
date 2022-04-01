@@ -3,7 +3,7 @@
     <section>
       <div>
         <h2
-          class="font-serif text-2xl lg:text-3xl text-fuchsia text-center mt-2"
+          class="font-serif mt-6 text-2xl lg:text-3xl text-fuchsia text-center"
         >
           Sign In
         </h2>
@@ -101,13 +101,19 @@
           </button>
         </form>
         <p class="mb-4">
-          <span class="italic mb-2 flex justify-center">
+          <span class="italic mb-2 flex justify-center font-bold text-fuchsia">
             Don't have an account?
           </span>
         </p>
-        <span class="dontHave mb-2">
-          <Routing :route="route" :buttonText="buttonText"
-        /></span>
+        <transition
+          mode="out-in"
+          enter-active-class="animate__animated animate__fadeIn"
+          leave-active-class="animate__animated animate__fadeOut"
+        >
+          <span class="dontHave mb-2">
+            <Routing :route="route" :buttonText="buttonText"
+          /></span>
+        </transition>
 
         <!-- <Routing :route="route" :buttonText="buttonText" /> -->
       </div>

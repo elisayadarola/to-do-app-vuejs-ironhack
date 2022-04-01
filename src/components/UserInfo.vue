@@ -1,12 +1,10 @@
 <template>
-  //DO NOT USE THIS VIEW - WORK IN PROGRESS
-  <h2 class="underline font-bold text-pink-600">
-    👇 Update your User Info below 👇
-  </h2>
+  <h2 class="font-bold text-fuchsia">👇 Update your User Info below 👇</h2>
   <input
     type="email"
     class="
       block
+      m-auto
       appearance-none
       bg-white
       border border-grey-light
@@ -15,7 +13,9 @@
       rounded
       shadow
       w-2/5
-      flex
+      mt-4
+      mb-2
+      text-center
     "
     placeholder="Insert your new e-mail"
     v-model="email"
@@ -23,7 +23,7 @@
   <a
     @click="handleUpdateUser({ email: email })"
     href="#"
-    class="btn-black font-bold flex"
+    class="btn-black font-bold flex-col mt-2 hover:text-fuchsia hover:font-bold"
     tabindex="0"
   >
     Update Email
@@ -32,6 +32,7 @@
     type="password"
     class="
       block
+      m-auto
       appearance-none
       bg-white
       border border-grey-light
@@ -40,6 +41,9 @@
       rounded
       shadow
       w-2/5
+      mt-2
+      mb-2
+      text-center
     "
     placeholder="Insert your new password"
     v-model="password"
@@ -47,7 +51,7 @@
   <a
     @click="UpdateUser({ password: password })"
     href="#"
-    class="btn-black font-bold flex"
+    class="btn-black font-bold flex-col hover:text-fuchsia hover:font-bold"
     tabindex="0"
   >
     Update password
@@ -77,6 +81,3 @@ async function UpdateUser(credentials) {
   }
 }
 </script>
-
-<style scoped>
-</style>

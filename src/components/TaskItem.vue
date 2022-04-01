@@ -1,5 +1,23 @@
 <template>
   <h4 class="mb-2 font-bold text-fuchsia">✨ Welcome {{ username() }} ✨</h4>
+
+  <router-link to="/user-info">
+    <button
+      :class="accountInfo"
+      class="
+        cursor-pointer
+        text-fuchsia
+        font-bold
+        mt-4
+        mb-4
+        hover:bg-fuchsia hover:text-white
+        border-white
+        p-2
+      "
+    >
+      Account Info
+    </button>
+  </router-link>
   <form @submit.prevent="addTodo">
     <!-- <NewTask @newTaskAddTodo="addTodo" />-->
     <h1 class="font-bold mb-6">Insert your tasks below</h1>
@@ -79,8 +97,8 @@
     {{ remaining === 1 ? "item" : "items" }} left
   </p>
 
-  <p class="mt-6 text-pink-600 font-bold underline" v-if="tasks.length === 0">
-    Looks like you've been productive! 💯
+  <p class="mt-6 text-pink-600 font-bold underline" v-if="tasks.is_complete">
+    Nice! Keep on going 💯
   </p>
   <div class="flex-col items-center">
     <input
@@ -129,7 +147,7 @@
   </div>
 
   <footer>
-    <!-- <button
+    <button
       class="
         button_two
         clear-completed
@@ -143,10 +161,21 @@
         items-center
         font-bold
       "
-      @click="removeCompleted"
+      @click="
+        removeCompleted();
+        explode();
+      "
     >
-      🧹 Clear completed 🧹
-    </button> -->
+      🧹 Clear all completed tasks 🧹
+    </button>
+    <ConfettiExplosion
+      v-if="visible"
+      :force="1"
+      :duration="2000"
+      :particleSize="18"
+      :particleCount="200"
+      :stageWidth="3200"
+    />
   </footer>
 </template>
 
@@ -154,7 +183,16 @@
 import { ref, computed, nextTick } from "vue";
 import { supabase } from "../supabase";
 import { useTaskStore } from "../store/task";
+import ConfettiExplosion from "vue-confetti-explosion";
 
+//Confetti woohoo
+const visible = ref(true);
+
+const explode = async () => {
+  visible.value = false;
+  await nextTick();
+  visible.value = true;
+};
 //for showing/hiding completed tasks
 const filters = {
   all: (todos) => todos,
@@ -235,12 +273,28 @@ async function completedTodo(todo) {
 
 //For removing completed
 // //
-function removeCompleted(todo) {
-  todo.value = todo.value.is_complete;
-  const completadaTodo = todo.value;
-  return completadaTodo;
-  console.log("task");
+async function removeCompleted(todo) {
+  await fetchingTasks();
+  tasks.value.forEach(async (todo) => {
+    await deleteTask(todo);
+  });
 }
+// function removeCompleted(todo) {
+//   await fetchingTasks();
+//   console.log('lololo')
+//   tasks.value.forEach(async (todo) => {
+//     await deleteTask(todo);
+//   });
+// //   const completadaTodo = todo.value;
+// //   return completadaTodo;
+// //   console.log("task");
+// // }
+// // async function removeAll() {
+// //   await getTasks();
+// //   tasks.value.forEach(async (task) => {
+// //     await remove(task);
+// //   });
+// // }
 
 //for filtering & hiding completed
 const hideCompleted = ref(false);
@@ -287,6 +341,9 @@ async function editTask(todo) {
   font-weight: bold;
   border-radius: 10px;
   background-color: rgb(226, 43, 195);
+}
+.accountInfo {
+  border-radius: 10px;
 }
 </style>
 

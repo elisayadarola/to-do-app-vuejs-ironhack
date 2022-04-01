@@ -15,9 +15,6 @@
       <p class="mb-4 mt-4 text-white font-bold">
         Enabling procrastinators to get their sh*t together since 2022 👊🏿
       </p>
-      <router-link to="'/user-info'">
-        <h4 class="cursor-pointer text-white font-bold mt-4">Account Info</h4>
-      </router-link>
       <p class="font-georgia mt-4 text-white">
         &copy; TaskAble App {{ currentYear }}
       </p>

@@ -3,6 +3,7 @@
     <router-link class="cursor-pointer" :to="'/'">
       <h1>TaskAble</h1></router-link
     >
+
     <blockquote
       class="text-2xl font-semibold italic text-center text-slate-900 mb-6 mt-4"
     >
